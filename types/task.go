@@ -55,6 +55,7 @@ type EremeticTask struct {
 	AgentPort         int32             `json:"agent_port"`
 	ForcePullImage    bool              `json:"force_pull_image"`
 	FetchURIs         []URI             `json:"fetch"`
+	Network           string            `json:"network"`
 }
 
 func isArchive(url string) bool {
@@ -118,6 +119,7 @@ func NewEremeticTask(request Request, name string) (EremeticTask, error) {
 		Volumes:           request.Volumes,
 		CallbackURI:       request.CallbackURI,
 		ForcePullImage:    request.ForcePullImage,
+		Network:           request.Network,
 		FetchURIs:         mergeURIs(request),
 	}
 	return task, nil

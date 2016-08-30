@@ -66,6 +66,13 @@ func createTaskInfo(task types.EremeticTask, offer *mesos.Offer) (types.Eremetic
 		commandInfo.Shell = proto.Bool(false)
 	}
 
+	var network *mesos.ContainerInfo_DockerInfo_Network
+	if task.Network != "" {
+		network = mesos.ContainerInfo_DockerInfo_Network(
+			mesos.ContainerInfo_DockerInfo_Network_value[task.Network]).Enum()
+	} else {
+		network = mesos.ContainerInfo_DockerInfo_HOST.Enum()
+	}
 	taskInfo := &mesos.TaskInfo{
 		TaskId: &mesos.TaskID{
 			Value: proto.String(task.ID),
@@ -78,6 +85,7 @@ func createTaskInfo(task types.EremeticTask, offer *mesos.Offer) (types.Eremetic
 			Docker: &mesos.ContainerInfo_DockerInfo{
 				Image:          proto.String(task.Image),
 				ForcePullImage: proto.Bool(task.ForcePullImage),
+				Network:        network,
 			},
 			Volumes: volumes,
 		},
